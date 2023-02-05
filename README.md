@@ -6,6 +6,7 @@ todo
         * cs indices
     * create strategy
     * flask work with bootstrap
+    * vendor cache
 
 level:
     * sources(vendor)
@@ -20,6 +21,7 @@ target
 
 depend lib:
     * requests
+    * requests_cache
     * pandas
     * flask
     * pytest
