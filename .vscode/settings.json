@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.html": "jinja-html"
+      },
+    // "python.testing.pytestEnabled": true,
+    // "python.testing.autoTestDiscoverOnSaveEnabled": true,
+}
