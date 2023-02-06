@@ -1,5 +1,5 @@
 <script src="{{ url_for('static', filename='npm/node_modules/echarts/dist/echarts.js')}}"></script>
-<div id="test" style="width: 600px;height:400px;">
+<div id="test" style="width: 1200px;height:800px;">
 <script type="text/javascript">
   var myChart = echarts.init(document.getElementById("test"));
   option = {
@@ -9,13 +9,17 @@
     yAxis: {},
     series: [
       {
+        type: "line",
         data: {{ dict_data.percent_data|tojson }},
-        type: "line"
       },
       {
+        type: "line",
         data: {{ dict_data.percent_current_data|tojson }},
-        type: "line"
       },
+      {
+        type: "scatter",
+        data: {{ dict_data.peak_and_vally_data|tojson }}
+      }
     ]
   };
   myChart.setOption(option);

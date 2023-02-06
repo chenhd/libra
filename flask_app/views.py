@@ -3,6 +3,7 @@ from . import app
 
 from flask import render_template
 from .models import get_kline_month_fluctuation
+from .models import get_kline_peak_and_vally
 
 @app.route("/")
 def hello_world():
@@ -26,13 +27,17 @@ def about(var_name):
 
 @app.route("/test")
 def test():
-    symbol = "SH600036" # 招商银行
+    # symbol = "SH600036" # 招商银行
+    symbol = "SH000300" # 沪深300
     df_data = get_kline_month_fluctuation(symbol)
 
     dict_data = {}
     dict_data["xAxis_data"] = df_data["timestamp"].to_list()
     dict_data["percent_data"] = df_data["percent"].to_list()
     dict_data["percent_current_data"] = df_data["percent_current"].to_list()
+
+    peak_and_vally_list = get_kline_peak_and_vally(df_data)
+    dict_data["peak_and_vally_data"] = peak_and_vally_list
 
     return render_template("test.html", dict_data=dict_data)
 
