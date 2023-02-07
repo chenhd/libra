@@ -132,4 +132,5 @@ dmypy.json
 
 .DS_Store
 node_modules/
-*.sqlite
+# *.sqlite
+# requests_cache_Net_Base.sqlite

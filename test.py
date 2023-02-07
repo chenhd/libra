@@ -16,5 +16,6 @@ import pytest
 
 # pytest.main(["-s"])
 # pytest.main(["tests"])
-pytest.main(["-s", "tests/test_models.py"])
+# pytest.main(["-s", "tests/test_models.py"])
+pytest.main(["-s", "tests/test_models.py::test_get_csindex_industry_data"])
 # pytest.main(["-s", "tests/test_hello.py::test_helloworld"])

@@ -25,6 +25,8 @@ depend lib:
     * pandas
     * flask
     * pytest
+    * openpyxl
+    * xlrd
 
     web:
     * echarts
