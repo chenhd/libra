@@ -1,4 +1,5 @@
 import os
+import collections
 from . import app
 
 from flask import render_template
@@ -49,4 +50,16 @@ def test():
     return render_template("test.html", dict_data=dict_data)
 
 
-    pass
+@app.route('/test_sidebars')
+def test_sidebars():
+    dict_data = collections.OrderedDict()
+    dict_data["home"] = [
+        1,
+        2,
+    ]
+    dict_data["dashboard"] = [
+        1,
+        2,
+    ]
+
+    return render_template("base.html", dict_data=dict_data)
