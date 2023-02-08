@@ -11,7 +11,8 @@
             // "program": "${file}", // "main.py",
             "program": "main.py",
             // "program": "test.py",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ],
     

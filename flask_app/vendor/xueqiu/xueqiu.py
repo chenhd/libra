@@ -36,7 +36,7 @@ class XueQiu(XueQiu_Base):
     def get_kline_data(self, symbol, period) -> pd.DataFrame:
         kline_url = self.KLINE_URL_TEMPLATE % (symbol, self.begin, period)
 
-        res = self.get(kline_url)
+        res = self.get(kline_url, headers=self.headers)
 
         json_data = res.json()
         assert json_data["error_code"] == 0
