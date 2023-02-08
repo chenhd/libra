@@ -1,13 +1,20 @@
-
+import os
 from . import app
 
 from flask import render_template
+from flask import send_from_directory
+
 from .models import get_kline_month_fluctuation
 from .models import get_kline_peak_and_vally
 
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/about/<var_name>', methods=["GET"])
 def about(var_name):
