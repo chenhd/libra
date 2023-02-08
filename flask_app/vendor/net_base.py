@@ -1,3 +1,4 @@
+from email import header
 import os
 import requests
 import requests_cache
@@ -18,8 +19,12 @@ class Net_Base:
         self.base_store_data_path = "./flask_app/store_data/"
     
     def get(self, *args, **argv):
-        res = self.session.get(*args, **argv)
-        assert res.status_code == 200
+        res = self.session.get(*args, **argv) # todo: requests cache bug, same bytes but always 400.
+
+        # if res.status_code != 200:
+        #     print("res.from_cache: ", res.from_cache)
+
+        assert res.status_code == 200 
         return res
     
     def post(self, *args, **argv):

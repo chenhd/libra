@@ -24,7 +24,7 @@ class XueQiu(XueQiu_Base):
     
     # 雪球请求涉及到cookies，需要在一开始的时候进行对首页的请求来生存所需cookies
     def create_cookies_in_session(self) -> None:
-        res = self.get(self.homepage)
+        res = self.get(self.homepage, headers=self.headers)
 
 
 
