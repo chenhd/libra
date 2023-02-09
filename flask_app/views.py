@@ -52,14 +52,29 @@ def test():
 
 @app.route('/test_sidebars')
 def test_sidebars():
+
+    # todo： https://stackoverflow.com/questions/15501518/dynamic-navigation-in-flask
+
     dict_data = collections.OrderedDict()
     dict_data["home"] = [
-        1,
-        2,
+        {
+            "name": "name",
+            "url": "url"
+        },
+        {
+            "name": "name2",
+            "url": "url2"
+        },
     ]
     dict_data["dashboard"] = [
-        1,
-        2,
+        {
+            "name": "name3",
+            "url": "url3"
+        },
+        {
+            "name": "name4",
+            "url": "url4"
+        },
     ]
 
     return render_template("base.html", dict_data=dict_data)

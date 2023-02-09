@@ -1,4 +1,4 @@
-{% block sidebars_css %}
+{# {% block sidebars_css %}
 <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -53,12 +53,12 @@
       }
     </style>
 <link href="{{ url_for('static', filename='css/sidebars.css') }}" rel="stylesheet" />
-{% endblock %}
+{% endblock %} #}
 
 {% macro sidebars(dict_data) %}
     <!-- bootstrap sidebars -->
-    test
-    {{ dict_data|tojson }}
+    {# test #}
+    {# {{ dict_data|tojson }} #}
     <!-- logo -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
       <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -194,13 +194,13 @@
                     {% for item in sub_list %}
                         <li>
                             <a
-                                href="#"
+                                href="#{{ item['url'] }}"
                                 class="link-dark d-inline-flex text-decoration-none rounded"
-                                >{{ item }}</a
+                                >{{ item["name"] }}</a
                             >
                             </li>
                     {% endfor %}
-                    <li>
+                    {# <li>
                     <a
                         href="#"
                         class="link-dark d-inline-flex text-decoration-none rounded"
@@ -220,12 +220,12 @@
                         class="link-dark d-inline-flex text-decoration-none rounded"
                         >Reports</a
                     >
-                    </li>
+                    </li> #}
                 </ul>
                 </div>
             </li>
             {% endfor %}
-          <li class="mb-1">
+          {# <li class="mb-1">
             <button
               class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
               data-bs-toggle="collapse"
@@ -343,7 +343,7 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> #}
           <li class="border-top my-3"></li>
           <li class="mb-1">
             <button
