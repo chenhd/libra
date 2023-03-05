@@ -1,0 +1,22 @@
+{% extends "layouts/_default/baseof.html" %}
+
+{% block main %}
+    {# <div class="offcanvas-body">
+    {% include "layouts/_default/docs-sidebar.html" %}
+    </div> #}
+    <div class="container-xxl bd-gutter mt-3 my-md-4 bd-layout">
+        <aside class="bd-sidebar">
+        <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="bdSidebar" aria-labelledby="bdSidebarOffcanvasLabel">
+            <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title" id="bdSidebarOffcanvasLabel">Browse docs</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdSidebar"></button>
+            </div>
+
+            <div class="offcanvas-body">
+            {# {{ partial "docs-sidebar" . }} #}
+            {% include "layouts/_default/docs-sidebar.html" %}
+            </div>
+        </div>
+        </aside>
+    </div>
+{% endblock %}

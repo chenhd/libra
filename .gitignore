@@ -134,3 +134,4 @@ dmypy.json
 node_modules/
 # *.sqlite
 # requests_cache_Net_Base.sqlite
+.sass-cache/

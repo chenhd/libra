@@ -22,6 +22,9 @@ def test_get_csindex_industry_data():
 
     df_data.groupby("中证一级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
     df_data.groupby("中证二级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-    df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum")
+    df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
 
     print("hello")
+
+# def test_get_indexes_data():
+#     from flask_app.models import

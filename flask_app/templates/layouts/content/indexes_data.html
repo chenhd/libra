@@ -1,0 +1,66 @@
+{% extends "layouts/_default/docs.html" %}
+
+
+{% block title %}
+indexes data page
+{% endblock %}
+
+
+{% block lead %}
+this is the lead position!
+{% endblock %}
+
+
+
+{% block content %}
+this is the content.
+
+<script src="{{ url_for('static', filename='npm/node_modules/echarts/dist/echarts.js')}}"></script>
+<div id="csindex_industry_level_1" style="width: 1200px;height:800px;">
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById("csindex_industry_level_1"));
+  option = {
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        top: '5%',
+        left: 'center'
+    },
+    series: [
+        {
+        name: '中证一级行业分类',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+        },
+        label: {
+            show: false,
+            position: 'center'
+        },
+        emphasis: {
+            label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+            }
+        },
+        labelLine: {
+            show: false
+        },
+        data: {{ dict_data.csindex_industry_level_1|tojson }}
+        }
+    ]
+    };
+  myChart.setOption(option);
+
+</script>
+{# {{
+    dict_data["csindex_industry_level_1"]
+}} #}
+
+{% endblock %}

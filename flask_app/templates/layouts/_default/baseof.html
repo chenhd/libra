@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% include "layouts/_default/header.html" %}
+  </head>
+
+  {% block body_override %}
+  <body>
+  {% endblock %}
+
+    {% include "layouts/_default/navbar.html" %}
+  {# {{ block "body_override" . }}<body>{{ end }}
+    {{ partial "skippy" . }}
+    {{ partial "icons" . }}
+
+    {{ partial "docs-navbar" . }}
+
+    {{ block "main" . }}
+    {{ end }}
+
+    {{ partial "footer" . }}
+    {{ partial "scripts" . }}
+
+    {{ block "footer" . }}
+    {{ end }} #}
+
+    {% block main %}
+    {% endblock %}
+
+    
+      hello
+      {{ config["TEST_DICT"] }}
+      world
+
+  </body>
+</html>

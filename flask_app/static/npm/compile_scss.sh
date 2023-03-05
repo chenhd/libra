@@ -1,0 +1,1 @@
+npx sass ../scss/docs.scss ../scss/docs.css
