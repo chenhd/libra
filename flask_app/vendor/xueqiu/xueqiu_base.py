@@ -27,7 +27,7 @@ class XueQiu_Base(Net_Base):
 
 
     # k-线链接模版，需要补充三个参数
-    #   symbol：标的名称
+    #   symbol：标的编号
     #   begin：当前时间戳相关值，已设置默认参数
     #   period：k-线周期指标，用于指定年k线、月k线等，主要标的为月k线
     KLINE_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/chart/kline.json?" \
@@ -37,5 +37,42 @@ class XueQiu_Base(Net_Base):
                          "&type=before" \
                          "&count=-284" \
                          "&indicator=kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance"
+    
+    # 个股基本面数据信息链接模版，需要补充一个参数
+    #   symbol：标的编号
+    QUOTE_INFO_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/quote.json?" \
+                              "symbol=%s" \
+                              "&extend=detail"
+    
+
+    # 页面位置：个股页面-财务数据-利润表
+    # 个股利润表，需要用多个子页查看各季度收入
+    # symbol：标的编号
+    # type为Q4表示年报数据，Q4指代年报，除此之外还有Q1、Q2、Q3、all
+    # count 指代单次页面拉取数据大小，这里用与页面数据一样的请求方式单次仅请求5次
+    # 子页索引通过timestamp实现，首次数据timestamp为空值
+    INCOME_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/finance/cn/income.json?" \
+                          "symbol=%s" \
+                          "&type=%s" \
+                          "&is_detail=true&count=%d" \
+                          "&timestamp=%s"
+
+    
+    # 页面位置：个股页面-公司概括-公司高管
+    # 高管持股数据
+    # symbol：标的编号
+    SKHOLDER_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/f10/cn/skholder.json?" \
+                            "symbol=%s"
+    
+
+
+    # 页面位置：个股页面-公司运作-分红送配
+    # 历年分红数据
+    # symbol：标的编号
+    # page：分红数据的子页索引，每页10条数据，如果刚好20条则第三页数据为空
+    BONUS_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/f10/cn/bonus.json?" \
+                         "symbol=%s" \
+                         "&size=10&page=%d&extend=true"
+
     
     

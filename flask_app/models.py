@@ -107,3 +107,30 @@ def get_kline_peak_and_vally(df_data, threshold=10):
 
 
 
+
+# 获取个股基本面信息
+def get_stock_info(symbol) -> dict:
+
+    dict_data = xueqiu_client.get_stock_info(symbol)
+    return dict_data
+
+# 获取个股利润表数据
+def get_stock_income(symbol) -> dict:
+    dict_data = xueqiu_client.get_stock_income(symbol)
+    return dict_data
+
+# 获取个股高管持股数据
+def get_stock_skholder(symbol) -> dict:
+    dict_data = xueqiu_client.get_stock_skholder(symbol)
+    return dict_data
+
+
+# 获取个股分红数据
+def get_stock_bonus(symbol) -> dict:
+    dict_data = xueqiu_client.get_stock_bonus(symbol)
+    return dict_data
+
+def get_kline_data_month(symbol) -> pd.DataFrame:
+    df_data = xueqiu_client.get_kline_data_month(symbol)
+    return df_data
+    

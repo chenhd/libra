@@ -1,0 +1,113 @@
+{% extends "layouts/_default/docs.html" %}
+
+
+{% block title %}
+hello title
+{% endblock %}
+
+
+{% block lead %}
+this is the lead position!
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class="container text-start">
+  <div class="row">
+    <div class="col">
+      当前股价：{{ dict_data.stock_info_data.current }}
+    </div>
+    <div class="col">
+      市盈率：{{ dict_data.stock_info_data.pe_ttm }}
+    </div>
+    <div class="col">
+      市净率：{{ dict_data.stock_info_data.pb }}
+    </div>
+    <div class="col">
+      ROE：{{ dict_data.stock_info_data.roe }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      流通市值：{{ dict_data.stock_info_data.float_market_capital }}
+    </div>
+    <div class="col">
+      总市值：{{ dict_data.stock_info_data.market_capital }}
+    </div>
+    <div class="col">
+      流通股：{{ dict_data.stock_info_data.float_shares }}
+    </div>
+    <div class="col">
+      总股本：{{ dict_data.stock_info_data.total_shares }}
+    </div>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">姓名</th>
+      <th scope="col">职务</th>
+      <th scope="col">持股数</th>
+      <th scope="col">持股占比</th>
+      <th scope="col">薪酬</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for person in dict_data.skholder_data %}
+        <tr>
+          <th scope="row">{{ person.personal_name }}</th>
+          <td>{{ person.position_name }}</td>
+          <td>{{ person.held_num }}</td>
+          <td>{{ person.held_num_percent }}</td>
+          <td>{{ person.annual_salary }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{# {{ dict_data.stock_info_data }}
+{{ dict_data.skholder_data }} #}
+
+<div id="stock_kline" style="width: 1200px;height:800px;">
+<script type="text/javascript">
+  var stock_kline = echarts.init(document.getElementById("stock_kline"));
+  option = {
+    xAxis: {
+      data: {{ dict_data.kline_data.timestamp|tojson }}
+    },
+    yAxis: {},
+    series: [
+      {
+        type: "line",
+        data: {{ dict_data.kline_data.close|tojson }}
+        {# itemStyle : { normal: {label: { show: true } } } #}
+      }
+    ]
+  };
+  stock_kline.setOption(option);
+
+</script>
+
+<div id="bonus_data" style="width: 1200px;height:800px;">
+<script type="text/javascript">
+  var bonus_data = echarts.init(document.getElementById("bonus_data"));
+  option = {
+    xAxis: {
+      data: {{ dict_data.bonus_data.dividend_date|tojson }}
+    },
+    yAxis: {},
+    series: [
+      {
+        type: "line",
+        data: {{ dict_data.bonus_data.plan_explain|tojson }}
+        {# itemStyle : { normal: {label: { show: true } } } #}
+      }
+    ]
+  };
+  bonus_data.setOption(option);
+
+</script>
+{% endblock %}

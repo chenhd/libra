@@ -1,13 +1,17 @@
 
+import re
 import time
 import requests
-import datetime
+# import datetime
+
 
 import pandas as pd
 import numpy as np
 
 from .xueqiu_base import XueQiu_Base
 
+from collections import OrderedDict
+from datetime import datetime
 
 class XueQiu(XueQiu_Base):
     def __init__(self) -> None:
@@ -27,7 +31,7 @@ class XueQiu(XueQiu_Base):
         res = self.get(self.homepage, headers=self.headers)
 
 
-
+    
 
     def get_kline_data_month(self, symbol) -> pd.DataFrame:
         period = "month"
@@ -84,13 +88,153 @@ class XueQiu(XueQiu_Base):
         # 3. 增加数据处理列
         # 修改时间戳列的可读性
         def timestamp_reformat(x):
-            data = datetime.datetime.utcfromtimestamp(x / 1000).strftime("%Y-%m")
+            data = datetime.utcfromtimestamp(x / 1000).strftime("%Y-%m")
             return data
         df_data["timestamp"] = df_data.apply(lambda x: timestamp_reformat(x.timestamp), axis=1)
         
         return df_data
 
-        pass
+    # 获取股票基本面数据信息
+    def get_stock_info(self, symbol) -> dict:
+        quote_info_url = self.QUOTE_INFO_URL_TEMPLATE % (symbol)
+
+        res = self.get(quote_info_url, headers=self.headers)
+
+        json_data = res.json()
+        assert json_data["error_code"] == 0
+        dict_data = self._do_quote_data(json_data)
+        
+        return dict_data
+
+    def _do_quote_data(self, json_data) -> dict:
+        quote_dict_data = json_data["data"]["quote"]
+        return quote_dict_data
+    
+    # 获取股票历年利润数据
+    def get_stock_income(self, symbol) -> dict:
+        _type = "Q4" # Q4指代年报，除此之外还有Q1、Q2、Q3、all
+        count = 5
+
+        od_report = OrderedDict()
+
+        timestamp = ""
+
+        times = 0
+        while True:
+            times += 1
+            if times > 10:
+                raise Exception("todo: protect logic.")
+
+            income_url = self.INCOME_URL_TEMPLATE % (symbol, _type, count, timestamp)
+
+            res = self.get(income_url, headers=self.headers)
+            data = res.json()
+            for report in data["data"]["list"]:
+                name = report["report_name"]
+                od_report[name] = report
+            
+            if len(data["data"]["list"]) == count:
+                # 通过最后一年的年报时间戳+1进行下个子页的搜索参数
+                timestamp = data["data"]["list"][-1]["report_date"] + 1
+            else:
+                break
+            
+        # print(od_report)
+        od_report = self._do_stock_income(od_report)
+        # print(od_report)
+        return od_report
+
+    # 处理利润表数据，保留目标数据
+    def _do_stock_income(self, od_report) -> OrderedDict:
+        od_report_new = OrderedDict()
+        for report_name, report in od_report.items():
+            report_new = {}
+            # 营业总收入
+            report_new["total_revenue"] = report["total_revenue"]
+            # 净利润
+            report_new["net_profit"] = report["net_profit"]
+            # 基本每股收益
+            report_new["basic_eps"] = report["basic_eps"]
+            od_report_new[report_name] = report_new
+
+            # todo: 每个数据之后带带有一个相对变化的百分比数值
+        
+        return od_report_new
+
+    # 获取个股高管持股数据
+    def get_stock_skholder(self, symbol) -> OrderedDict:
+        skholder_url = self.SKHOLDER_URL_TEMPLATE % (symbol)
+
+        res = self.get(skholder_url, headers=self.headers)
+
+        json_data = res.json()
+        assert json_data["error_code"] == 0
+        # print(json_data)
+
+        target_list = []
+        for item in json_data["data"]["items"]:
+            target_item = {}
+            # 姓名
+            target_item["personal_name"] = item["personal_name"]
+            # 职务
+            target_item["position_name"] = item["position_name"]
+            # 持股数
+            target_item["held_num"] = item["held_num"]
+            # 年薪
+            target_item["annual_salary"] = item["annual_salary"]
+            target_list.append(target_item)
+        
+        return target_list
+
+    # 获取个股分红数据
+    def get_stock_bonus(self, symbol) -> OrderedDict:
+            # https://stock.xueqiu.com/v5/stock/f10/cn/bonus.json?symbol=SH600900&size=10&page=3&extend=true
+        od_bonus = OrderedDict()
+        
+        page = 1
+
+        times = 0
+        while True:
+            times += 1
+            if times > 10:
+                raise Exception("todo: protect logic.")
+            
+
+            bonus_url = self.BONUS_URL_TEMPLATE % (symbol, page)
+            res = self.get(bonus_url, headers=self.headers)
+            json_data = res.json()
+            assert json_data["error_code"] == 0
+            for item in json_data["data"]["items"]:
+                target_dict = {}
+                # 分红相关年报
+                target_dict["dividend_year"] = item["dividend_year"]
+                # 分红方案
+                target_dict["plan_explain"] = item["plan_explain"]
+                # 派息日
+                target_dict["dividend_date"] = item["dividend_date"]
+                
+                od_bonus[target_dict["dividend_year"]] = target_dict
+            
+            if len(json_data["data"]["items"]) < 10:
+                break
+            else:
+                page += 1
+        
+        od_bonus = self._do_stock_bonus(od_bonus)
+        return od_bonus
+
+    def _do_stock_bonus(self, od_bonus) -> OrderedDict:
+        for dividend_year, item in od_bonus.items():
+            item["dividend_date"] = datetime.fromtimestamp(item["dividend_date"]/1000).strftime("%Y-%m-%d")
+            # 将多个分红方案抽取成多个元素组成的list，默认仅关注第一个元素
+            filter = re.findall("10派\d+.\d*元", item["plan_explain"])
+            if len(filter) > 0:
+                item["plan_explain"] = filter
+            else:
+            # todo: 还需处理复杂过滤方案
+                item["plan_explain"] = [item["plan_explain"]]
+        return od_bonus
+        
 
 
 

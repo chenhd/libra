@@ -2,6 +2,9 @@
 
 
 
+from numpy import kaiser
+
+
 def test_get_kline_data_month():
     from flask_app.models import get_kline_month_fluctuation
     from flask_app.models import get_kline_peak_and_vally
@@ -28,3 +31,69 @@ def test_get_csindex_industry_data():
 
 # def test_get_indexes_data():
 #     from flask_app.models import
+def test_get_stock_data():
+    from flask_app.models import get_stock_info
+    # symbol = "SH600036" # 招商银行
+    symbol = "SH600900" # 长江电力
+    data = get_stock_info(symbol)
+    # print(data)
+    # todo:
+        # 1. 价格
+        # 2. 市盈率、市净率
+        # 3. 净资产收益率
+        # 4. 资产/营收、营收/利润
+        # 5. 高管持股数
+        # 6. 分红质量（与债券比对）、分红概率、分红稳定性
+        # 7. 下跌风险评估
+
+    # 当前股价
+    current = data["current"]
+    # 动态市盈率
+    pe_ttm = data["pe_ttm"]
+    # 市净率
+    pb = data["pb"]
+    # 净资产收益率
+        # eps: 每股利润, Earnings Per Share
+        # navps: 每股资产净值, Net Asset Value Per Share (NAVPS)
+    roe = data["eps"] / data["navps"]
+    # 总市值
+    market_capital = data["market_capital"]
+    # 总股本
+    total_shares = data["total_shares"]
+    # 流通市值
+    float_market_capital = data["float_market_capital"]
+    # 流通股
+    float_shares = data["float_shares"]
+    # # 资产总值
+    # total_assets = market_capital / pb
+    # 总股本
+    total_shares = data["total_shares"]
+    # 流通股
+    float_shares = data["float_shares"]
+
+    from flask_app.models import get_stock_income
+    data = get_stock_income(symbol)
+    # print(data)
+
+
+    from flask_app.models import get_stock_skholder
+    data = get_stock_skholder(symbol)
+    # print(data)
+
+
+    from flask_app.models import get_stock_bonus
+    data = get_stock_bonus(symbol)
+
+    # todo：融合k线面板
+
+
+    # 布局：
+    #     基本面、
+    #     月k
+    #     收入、分红k线（独立图
+    #     高管持股
+
+
+
+
+    pass
