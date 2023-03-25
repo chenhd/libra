@@ -12,5 +12,10 @@ app = Flask(
 # Load the views
 from flask_app import views
 
+# Load the blueprint
+from .blueprint import bp_list
+for bp in bp_list:
+    app.register_blueprint(bp)
+
 # Load the config file
 app.config.from_object('config')

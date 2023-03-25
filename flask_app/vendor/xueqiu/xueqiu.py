@@ -225,6 +225,9 @@ class XueQiu(XueQiu_Base):
 
     def _do_stock_bonus(self, od_bonus) -> OrderedDict:
         for dividend_year, item in od_bonus.items():
+            if item["dividend_date"] is None:
+                # 预案，未确定分红时间
+                continue
             item["dividend_date"] = datetime.fromtimestamp(item["dividend_date"]/1000).strftime("%Y-%m-%d")
             # 将多个分红方案抽取成多个元素组成的list，默认仅关注第一个元素
             filter = re.findall("10派\d+.\d*元", item["plan_explain"])

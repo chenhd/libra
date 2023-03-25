@@ -14,6 +14,27 @@ this is the lead position!
 
 {% block content %}
 
+<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    {{ dict_data.stock_info_data.name }}
+  </button>
+  <ul class="dropdown-menu" style="">
+    
+    {# {{ config["GET_STOCK_DATA_DICT"] }} #}
+
+    {% for symbol, stock_info in config["GET_STOCK_DATA_DICT"].items() %}
+      <li><a class="dropdown-item" href="/stock_data/{{ symbol }}">{{ stock_info.name }}</a></li>  
+    {% endfor %}
+
+    {# <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li> #}
+  </ul>
+</div>
+
+
+
+
 <div class="container text-start">
   <div class="row">
     <div class="col">
@@ -30,17 +51,20 @@ this is the lead position!
     </div>
   </div>
   <div class="row">
-    <div class="col">
+    {# <div class="col">
       流通市值：{{ dict_data.stock_info_data.float_market_capital }}
-    </div>
+    </div> #}
     <div class="col">
       总市值：{{ dict_data.stock_info_data.market_capital }}
     </div>
-    <div class="col">
+    {# <div class="col">
       流通股：{{ dict_data.stock_info_data.float_shares }}
-    </div>
+    </div> #}
     <div class="col">
       总股本：{{ dict_data.stock_info_data.total_shares }}
+    </div>
+    <div class="col">
+      流通率：{{ dict_data.stock_info_data.float_ratio }}
     </div>
   </div>
 </div>
@@ -90,7 +114,6 @@ this is the lead position!
   stock_kline.setOption(option);
 
 </script>
-
 <div id="bonus_data" style="width: 1200px;height:800px;">
 <script type="text/javascript">
   var bonus_data = echarts.init(document.getElementById("bonus_data"));
@@ -108,6 +131,26 @@ this is the lead position!
     ]
   };
   bonus_data.setOption(option);
+
+</script>
+
+<div id="bonus_ratio" style="width: 1200px;height:800px;">
+<script type="text/javascript">
+  var bonus_ratio = echarts.init(document.getElementById("bonus_ratio"));
+  option = {
+    xAxis: {
+      data: {{ dict_data.bonus_data.dividend_date|tojson }}
+    },
+    yAxis: {},
+    series: [
+      {
+        type: "line",
+        data: {{ dict_data.bonus_data.bonus_ratio|tojson }}
+        {# itemStyle : { normal: {label: { show: true } } } #}
+      }
+    ]
+  };
+  bonus_ratio.setOption(option);
 
 </script>
 {% endblock %}
