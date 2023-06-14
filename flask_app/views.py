@@ -96,51 +96,51 @@ def test_zxc():
     return render_template("layouts/content/zxc.html")
 
 
-@app.route("/get_indexes_data/<index>", methods=["GET"])
-def get_indexes_data(index):
-    # todo: 
-    #   1. 行业占比 饼图
-    #   2. 趋势
-    #   3. 历史位置
-    symbol = "SH000300" # 沪深300
+# @app.route("/get_indexes_data/<index>", methods=["GET"])
+# def get_indexes_data(index):
+#     # todo: 
+#     #   1. 行业占比 饼图
+#     #   2. 趋势
+#     #   3. 历史位置
+#     symbol = "SH000300" # 沪深300
 
 
 
-    from flask_app.vendor.csindex.csindex import csindex_client
-    csindex_industry_data = csindex_client.get_csindex_industry_data()
-    csindex_000300_closeweight_data = csindex_client.get_csindex_000300_closeweight_data()
+#     from flask_app.vendor.csindex.csindex import csindex_client
+#     csindex_industry_data = csindex_client.get_csindex_industry_data()
+#     csindex_000300_closeweight_data = csindex_client.get_csindex_000300_closeweight_data()
     
-    import pandas as pd
-    df_data = pd.merge(csindex_000300_closeweight_data, csindex_industry_data, left_on="成分券代码Constituent Code", right_on="证券代码", how="left")
+#     import pandas as pd
+#     df_data = pd.merge(csindex_000300_closeweight_data, csindex_industry_data, left_on="成分券代码Constituent Code", right_on="证券代码", how="left")
 
-    df_data.groupby("中证一级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-    df_data.groupby("中证二级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-    df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-
-
-    csindex_industry_level_1 = df_data.groupby("中证一级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-    csindex_industry_level_2 = df_data.groupby("中证二级行业分类代码简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-    csindex_industry_level_3 = df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
-
-    csindex_industry_level_1_data_list = []
-    for index, row in csindex_industry_level_1.iterrows():
-        # print(index)
-        # print(row.name, row.values[0])
-        csindex_industry_level_1_data_list.append(
-                {
-                    "name": row.name,
-                    "value": row.values[0]
-                }
-            )
+#     df_data.groupby("中证一级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
+#     df_data.groupby("中证二级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
+#     df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
 
 
-    dict_data = {
-        "csindex_industry_level_1": csindex_industry_level_1_data_list,
-        "csindex_industry_level_2": csindex_industry_level_2,
-        "csindex_industry_level_3": csindex_industry_level_3
-    }
+#     csindex_industry_level_1 = df_data.groupby("中证一级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
+#     csindex_industry_level_2 = df_data.groupby("中证二级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
+#     csindex_industry_level_3 = df_data.groupby("中证三级行业分类简称")[["权重(%)weight"]].agg("sum").sort_values("权重(%)weight", ascending=False)
 
-    return render_template("layouts/content/indexes_data.html", dict_data=dict_data)
+#     csindex_industry_level_1_data_list = []
+#     for index, row in csindex_industry_level_1.iterrows():
+#         # print(index)
+#         # print(row.name, row.values[0])
+#         csindex_industry_level_1_data_list.append(
+#                 {
+#                     "name": row.name,
+#                     "value": row.values[0]
+#                 }
+#             )
+
+
+#     dict_data = {
+#         "csindex_industry_level_1": csindex_industry_level_1_data_list,
+#         # "csindex_industry_level_2": csindex_industry_level_2,
+#         # "csindex_industry_level_3": csindex_industry_level_3
+#     }
+
+#     return render_template("layouts/content/indexes_data.html", dict_data=dict_data)
 
 
 

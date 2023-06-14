@@ -20,6 +20,8 @@ class XueQiu(XueQiu_Base):
         self.begin = int((time.time() + 3600*24) * 1000)
 
         self.create_cookies_in_session()
+
+        self.df_all_stock_market_capital = None
     
     # def get(self, url):
     #     res = self.session.get(url, headers=self.headers)
@@ -188,7 +190,7 @@ class XueQiu(XueQiu_Base):
 
     # 获取个股分红数据
     def get_stock_bonus(self, symbol) -> OrderedDict:
-            # https://stock.xueqiu.com/v5/stock/f10/cn/bonus.json?symbol=SH600900&size=10&page=3&extend=true
+        # https://stock.xueqiu.com/v5/stock/f10/cn/bonus.json?symbol=SH600900&size=10&page=3&extend=true
         od_bonus = OrderedDict()
         
         page = 1
@@ -239,6 +241,54 @@ class XueQiu(XueQiu_Base):
         return od_bonus
         
 
+    def get_all_stock_market_capital(self):
+        # 路径：行情 - 行情中心 - 沪深一览 - （筛选市值倒序）
+        # https://stock.xueqiu.com/v5/stock/screener/quote/list.json?page=1&size=90&order=desc&orderby=market_capital&order_by=market_capital&market=CN&type=sh_sz
+
+        # od_all_stock_market_capital = OrderedDict()
+        # list_all_stock_market_capital = []
+        if self.df_all_stock_market_capital is None:
+            df_all_stock_market_capital = pd.DataFrame(columns=["symbol", "market_capital"])
+
+            page = 1
+
+            times = 0
+            while True:
+                times += 1
+                if times > 100:
+                    raise Exception("todo: protect logic.")
+                
+                url = self.ALL_STOCK_MARKET_CAPITAL_URL_TEMPLATE % (page)
+                res = self.get(url, headers=self.headers)
+                json_data = res.json()
+                assert json_data["error_code"] == 0
+                if "list" in json_data["data"]:
+                    for item in json_data["data"]["list"]:
+                        # 股票编号、股票市值
+                        df_all_stock_market_capital.loc[len(df_all_stock_market_capital.index)] = [item["symbol"], item["market_capital"]]
+                    
+                    page += 1
+                else:
+                    break
+            
+            df_all_stock_market_capital = self._do_all_stock_market_capital(df_all_stock_market_capital)
+            self.df_all_stock_market_capital = df_all_stock_market_capital
+        return self.df_all_stock_market_capital
+    
+    def _do_all_stock_market_capital(self, df_all_stock_market_capital):
+        # 筛除B股数据
+        df_all_stock_market_capital = df_all_stock_market_capital[~df_all_stock_market_capital["symbol"].str.startswith("SH900")]
+        # 去除股票代码前缀
+        df_all_stock_market_capital["symbol"] = df_all_stock_market_capital["symbol"].str[2:]
+        return df_all_stock_market_capital
+                
+
+
+            
+
+
+
+        
 
 
 

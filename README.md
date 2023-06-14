@@ -1,12 +1,14 @@
 # libra
 
 todo
-    * move data in
+    - move data in
         * kline-month
         * cs indices
     * create strategy
-    * flask work with bootstrap
-    * vendor cache
+    - flask work with bootstrap
+    - vendor cache
+    * manage data
+    * index analyse
 
 level:
     * sources(vendor)

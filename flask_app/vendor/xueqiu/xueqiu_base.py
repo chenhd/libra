@@ -73,6 +73,13 @@ class XueQiu_Base(Net_Base):
     BONUS_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/f10/cn/bonus.json?" \
                          "symbol=%s" \
                          "&size=10&page=%d&extend=true"
+    
 
-    
-    
+
+
+    # 页面位置：行情 - 行情中心 - 沪深一览 - （筛选市值倒序）
+    # 股票当前市值
+    # page：数据的子页索引，每页90条数据，第56页数据为空
+    ALL_STOCK_MARKET_CAPITAL_URL_TEMPLATE = "https://stock.xueqiu.com/v5/stock/screener/quote/list.json?" \
+                                            "page=%d" \
+                                            "&size=90&order=desc&orderby=market_capital&order_by=market_capital&market=CN&type=sh_sz"

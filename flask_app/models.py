@@ -2,6 +2,7 @@
 import pandas as pd
 
 from .vendor.xueqiu.xueqiu import xueqiu_client
+from .vendor.csindex.csindex import csindex_client
 
 def _do_kline_month_fluctuation_data(df_data) -> pd.DataFrame:
     # 新增属性列
@@ -130,7 +131,22 @@ def get_stock_bonus(symbol) -> dict:
     dict_data = xueqiu_client.get_stock_bonus(symbol)
     return dict_data
 
+# 获取月度K线数据
 def get_kline_data_month(symbol) -> pd.DataFrame:
     df_data = xueqiu_client.get_kline_data_month(symbol)
     return df_data
-    
+
+# 获取全市场股票市值数据
+def get_all_stock_market_capital():
+    df_data = xueqiu_client.get_all_stock_market_capital()
+    return df_data
+
+# 获取中证行业分类数据
+def get_csindex_industry_data():
+    df_data = csindex_client.get_csindex_industry_data()
+    return df_data
+
+# 以指数id动态获取目标指数个股权重数据
+def get_csindex_target_closeweight_data(index_id):
+    df_data = csindex_client.get_csindex_target_closeweight_data(index_id)
+    return df_data

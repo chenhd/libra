@@ -1,0 +1,98 @@
+{% extends "layouts/_default/docs.html" %}
+
+
+{% block title %}
+hello title
+{% endblock %}
+
+
+{% block lead %}
+this is the lead position!
+{% endblock %}
+
+
+
+{% block content %}
+<div id="position_data" style="width: 1200px;height:800px;">
+<script type="text/javascript">
+  var position_data = echarts.init(document.getElementById("position_data"));
+  var data = [
+    {% for position_type, element in config["TRADING_POSITION"]["TARGET"].items() %}
+      {
+        name: "{{ position_type }}",
+        itemStyle: {
+          color: "{{  config["TRADING_POSITION_TARGET_COLOR"][position_type] }}"
+        },
+        children: [
+          {% for name, value in element.items() %}
+          {
+            name: "{{ name }}",
+            value: {{ value}},
+          },
+          {% endfor %}
+        ]
+      },
+    {% endfor %}
+  ]
+
+
+  option = {
+    title: {
+      text: 'WORLD COFFEE RESEARCH SENSORY LEXICON',
+      subtext: 'Source: https://worldcoffeeresearch.org/work/sensory-lexicon/',
+      textStyle: {
+        fontSize: 14,
+        align: 'center'
+      },
+      subtextStyle: {
+        align: 'center'
+      },
+      sublink: 'https://worldcoffeeresearch.org/work/sensory-lexicon/'
+    },
+    series: {
+      type: 'sunburst',
+      data: data,
+      radius: [0, '95%'],
+      sort: undefined,
+      emphasis: {
+        focus: 'ancestor'
+      },
+      levels: [
+        {},
+        {
+          r0: '15%',
+          r: '35%',
+          itemStyle: {
+            borderWidth: 2
+          },
+          label: {
+            rotate: 'tangential'
+          }
+        },
+        {
+          r0: '35%',
+          r: '70%',
+          label: {
+            align: 'right'
+          }
+        },
+        {
+          r0: '70%',
+          r: '72%',
+          label: {
+            position: 'outside',
+            padding: 3,
+            silent: false
+          },
+          itemStyle: {
+            borderWidth: 3
+          }
+        }
+      ]
+    }
+  };
+  position_data.setOption(option);
+
+</script>
+
+{% endblock %}

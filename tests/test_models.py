@@ -3,7 +3,7 @@
 
 
 from numpy import kaiser
-
+import pandas as pd
 
 def test_get_kline_data_month():
     from flask_app.models import get_kline_month_fluctuation
@@ -95,5 +95,22 @@ def test_get_stock_data():
 
 
 
+def test_get_all_stock_market_capital():
+    from flask_app.models import get_all_stock_market_capital, get_csindex_industry_data
 
-    pass
+    csindex_industry_data = get_csindex_industry_data()
+    all_stock_market_capital = get_all_stock_market_capital()
+    all_stock_market_capital["symbol"] = all_stock_market_capital["symbol"].str[2:]
+
+    print("hello")
+
+    df_data = pd.merge(csindex_industry_data, all_stock_market_capital, left_on="证券代码", right_on="symbol", how="outer")
+
+
+    csindex_industry_level_1 = df_data.groupby("中证一级行业分类简称")[["market_capital"]].agg("sum").sort_values("market_capital", ascending=False)
+    csindex_industry_level_2 = df_data.groupby("中证二级行业分类简称")[["market_capital"]].agg("sum").sort_values("market_capital", ascending=False)
+    csindex_industry_level_3 = df_data.groupby("中证三级行业分类简称")[["market_capital"]].agg("sum").sort_values("market_capital", ascending=False)
+
+    df_data[df_data["中证二级行业分类简称"]=="银行"].sort_values("market_capital", ascending=False)
+
+    print(df_data)
