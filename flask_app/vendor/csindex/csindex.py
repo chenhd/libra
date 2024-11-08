@@ -34,7 +34,7 @@ class CSIndex(CSIndex_Base):
         filepath = self.save_download_file(filename, res.content)
 
         # todo: too slow to be speed up.
-        df_data = pd.read_excel(filepath)
+        df_data = pd.read_excel(filepath, engine="calamine")
 
         return df_data
 

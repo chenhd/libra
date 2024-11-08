@@ -1,5 +1,9 @@
 # libra
 
+install: 
+    cd .\flask_app\static\npm
+    npm install
+
 todo
     - move data in
         * kline-month

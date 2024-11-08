@@ -13,7 +13,8 @@ from .models import *
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return render_template("layouts/_default/test_base.html")
+    # return "<p>Hello, World!</p>"
 
 @app.route("/favicon.ico")
 def favicon():
